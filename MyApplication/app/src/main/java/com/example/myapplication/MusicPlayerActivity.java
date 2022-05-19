@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,8 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class MusicPlayerActivity extends AppCompatActivity {
+    MyBroadcastReceiver broadcastForPocket = new MyBroadcastReceiver();
+    MyBroadcastReceiver broadcastForTable = new MyBroadcastReceiver();
 
     TextView titleTv,currentTimeTv,totalTimeTv;
     SeekBar seekBar;
@@ -28,6 +31,11 @@ public class MusicPlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_player);
+
+        IntentFilter filter1 = new IntentFilter("com.example.myapplication.IN_POCKET_TRIGGER");
+        registerReceiver(broadcastForPocket, filter1);
+        IntentFilter filter2 = new IntentFilter("com.example.myapplication.ON_TABLE_TRIGGER");
+        registerReceiver(broadcastForTable, filter2);
 
         titleTv = findViewById(R.id.song_title);
         currentTimeTv = findViewById(R.id.current_time);
@@ -82,6 +90,13 @@ public class MusicPlayerActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastForPocket);
+        unregisterReceiver(broadcastForTable);
     }
 
     void setResourcesWithMusic(){

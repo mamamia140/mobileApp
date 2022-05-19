@@ -3,6 +3,7 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         userName = (EditText)findViewById(R.id.etUserName);
         password = (EditText)findViewById(R.id.etPassword);
@@ -52,7 +54,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void verify(String userName,String password){
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    public void verify(String userName, String password){
         Boolean checkuserpass = DB.checkusernamepassword(userName, password);
         if(checkuserpass==true){
             Toast.makeText(MainActivity.this, "Sign in successfull", Toast.LENGTH_SHORT).show();
